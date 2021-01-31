@@ -1,20 +1,22 @@
-const displayChart = generatedData => {
-  const ctx = document.getElementById('myChart').getContext('2d');
-  ctx.canvas.width = 1000;
-  ctx.canvas.height = 300;
+// https://www.chartjs.org/samples/latest/scales/time/financial.html
+const ctx = document.getElementById('myChart').getContext('2d');
+ctx.canvas.width = 900;
+ctx.canvas.height = 300;
+
+const displayChart = sortedData => {
 
   const cfg = {
     data: {
       datasets: [{
-        label: 'Blood Sugar',
+        label: 'Data',
         backgroundColor: '#148be8',
         borderColor: '#148be8',
-        data: generatedData,
+        data: sortedData,
         type: 'bar',
         pointRadius: 0,
         fill: false,
         lineTension: 0,
-        borderWidth: 2
+        borderWidth: 0
       }]
     },
     options: {
