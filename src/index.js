@@ -6,47 +6,31 @@ const manipulate = (payload) => {
   
   const objectified = data.map(d => (
     {
-      id: d[1],
-      date: d[2],
-      method: d[3],
-      historic: d[4],
-      scanned: d[5],
+      date: Date.parse(d[2]),
+      historic: Number(d[4]),
+      scanned: Number(d[5]),
     }
   ));
 
-  const sortedData = objectified.sort((a, b) => {
+  const dataArray = [];
+  objectified.forEach(d => {
+    if (d.historic > 0) {
+      dataArray.push({ t: d.date, y: d.historic });
+    }
+    // } else if (d.scanned > 0) {
+    //   dataArray.push({ t: d.date, y: d.scanned }); 
+    // }
+  })
+
+  const sortedData = dataArray.sort((a, b) => {
     const aDate = new Date(a.date);
     const bDate = new Date(b.date);
     return aDate - bDate;
   })
 
-  const dates = sortedData.map(o => o.date);
-  const historic = sortedData.map(o => o.historic);
-  const scanned = sortedData.map(o => o.scanned);
+  console.log(sortedData);
 
-  const chartData = {
-    labels: dates,
-    datasets: [
-      {
-        label: 'Auto Data',
-        data: historic,
-        backgroundColor: '#1d80ab',
-        borderColor: '#1d80ab',
-      },
-      {
-        label: 'Scanned Data',
-        data: scanned,
-        backgroundColor: '#148be8',
-        borderColor: '#148be8',        
-      }
-    ],
-  }
-
-  new Chart(ctx, {
-      type: 'line',
-      data: chartData,
-      options: {}
-  });
+  displayChart(sortedData);
 
 }
 
