@@ -14,9 +14,15 @@ const manipulate = (payload) => {
     }
   ));
 
-  const dates = objectified.map(o => o.date);
-  const historic = objectified.map(o => o.historic);
-  const scanned = objectified.map(o => o.scanned);
+  const sortedData = objectified.sort((a, b) => {
+    const aDate = new Date(a.date);
+    const bDate = new Date(b.date);
+    return aDate - bDate;
+  })
+
+  const dates = sortedData.map(o => o.date);
+  const historic = sortedData.map(o => o.historic);
+  const scanned = sortedData.map(o => o.scanned);
 
   const chartData = {
     labels: dates,
@@ -24,10 +30,14 @@ const manipulate = (payload) => {
       {
         label: 'Auto Data',
         data: historic,
+        backgroundColor: '#1d80ab',
+        borderColor: '#1d80ab',
       },
       {
         label: 'Scanned Data',
         data: scanned,
+        backgroundColor: '#148be8',
+        borderColor: '#148be8',        
       }
     ],
   }
