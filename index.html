@@ -13,16 +13,18 @@
 
   <div class="fileArea">
     <input type="file" id="files" multiple>
+    <button id="parse">Process Data</button>
   </div>
 
-  <div class="filterArea">
-    <label for="startDate">Select Date</label>
+  <hr>
+
+  <div class="filterArea hidden">
+    <label for="startDate">Start Date</label>
     <input type="text" id="startDate">
-    <i>Leave or make empty to see all data...</i>
-  </div>
-
-  <div class="buttonArea">
-    <button id="parse">PARSE</button>
+    <label for="endDate">End Date</label>
+    <input type="text" id="endDate">
+    <button id="reset">Clear</button>
+    <button id="filter">Filter Data</button>
   </div>
 
   <div class="canvasArea">

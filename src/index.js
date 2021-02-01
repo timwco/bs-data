@@ -1,6 +1,12 @@
 // Grab Our Elements
 const startDate = document.getElementById('startDate');
+const endDate = document.getElementById('endDate');
 const parseBtn = document.getElementById('parse');
+const filterBtn = document.getElementById('filter');
+const resetBtn = document.getElementById('reset');
+const hiddenArea = document.querySelector('.hidden');
+
+let initial = true;
 
 // Parse Callback
 const manipulate = (payload) => {
@@ -37,13 +43,29 @@ const manipulate = (payload) => {
   const uniqueData = sortedData.filter((v,i,a)=>a.findIndex(t=>(t.t === v.t))===i);
 
   let graphedData = uniqueData;
-  if (startDate.value !== '') {
-    const selectedTimeStamp = Date.parse(startDate.value);
-    graphedData = uniqueData.filter(d => timesSameDay(d.t, selectedTimeStamp))
+
+
+  // Check Filters
+  const sdv = startDate.value;
+  const edv = endDate.value;
+  if (!initial && sdv && edv) {
+    const startTimeStamp = Date.parse(sdv);
+    const endTimeStamp = Date.parse(edv) + 86400000;
+    graphedData = uniqueData.filter(d => (d.t > startTimeStamp && d.t < endTimeStamp));
+  }
+
+  if (graphedData.length === 0) {
+    return alert('No data found in these filters! Please select different dates.');
   }
 
   // Load that chart!
-  displayChart(graphedData);
+  if (initial) {
+    displayChart(graphedData);
+    hiddenArea.classList.remove('hidden');
+  } else {
+    updateChart(graphedData);
+  }
+  
 }
 
 // Parse Config
@@ -53,8 +75,8 @@ const config = {
   },
 }
 
-// Parse Button Click Event Func
-parseBtn.onclick = () => {
+// Kick off the File Reader{
+const readAndParseFile = () => {
   const fileInput = document.getElementById('files');
   const file = fileInput.files[0];
   if (file) {
@@ -64,9 +86,32 @@ parseBtn.onclick = () => {
   }
 }
 
+// Parse Button Click Event Func
+parseBtn.onclick = () => {
+  initial = true;
+  readAndParseFile();
+}
+
+// Filter Button Click Event Func
+filterBtn.onclick = () => {
+  if (startDate.value !== '' && endDate.value !== '') {
+    initial = false;
+    readAndParseFile();
+  } else {
+    alert('Please Select a Start & End Date');
+  }
+}
+
+// Reset Button
+resetBtn.onclick = () => {
+  startDate.value = '';
+  endDate.value = '';
+  readAndParseFile();
+}
 
 // Date Picker
 new Pikaday({ field: startDate });
+new Pikaday({ field: endDate });
 
 
 // Timestamps are Same

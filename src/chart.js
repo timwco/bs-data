@@ -3,15 +3,16 @@ const ctx = document.getElementById('myChart').getContext('2d');
 ctx.canvas.width = 900;
 ctx.canvas.height = 300;
 
-const displayChart = sortedData => {
+let chart;
 
-  const cfg = {
+const buildConfig = data => (
+  {
     data: {
       datasets: [{
         label: 'Data',
         backgroundColor: '#148be8',
         borderColor: '#148be8',
-        data: sortedData,
+        data: data,
         type: 'bar',
         pointRadius: 0,
         fill: false,
@@ -91,7 +92,16 @@ const displayChart = sortedData => {
         }
       }
     }
-  };
+  }
+)
 
-  const chart = new Chart(ctx, cfg);
+const displayChart = sortedData => {
+  const cfg = buildConfig(sortedData);
+  chart = new Chart(ctx, cfg);
+}
+
+const updateChart = sortedData => {
+  const cfg = buildConfig(sortedData);
+  chart.destroy();
+  chart = new Chart(ctx, cfg);
 }
