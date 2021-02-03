@@ -6,8 +6,6 @@ const filterBtn = document.getElementById('filter');
 const resetBtn = document.getElementById('reset');
 const hiddenArea = document.querySelector('.hidden');
 
-let initial = true;
-
 // Parse Callback
 const manipulate = (payload) => {
   const {data} = payload;
@@ -48,7 +46,7 @@ const manipulate = (payload) => {
   // Check Filters
   const sdv = startDate.value;
   const edv = endDate.value;
-  if (!initial && sdv && edv) {
+  if (sdv && edv) {
     const startTimeStamp = Date.parse(sdv);
     const endTimeStamp = Date.parse(edv) + 86400000;
     graphedData = uniqueData.filter(d => (d.t > startTimeStamp && d.t < endTimeStamp));
@@ -58,14 +56,8 @@ const manipulate = (payload) => {
     return alert('No data found in these filters! Please select different dates.');
   }
 
-  // Load that chart!
-  if (initial) {
-    displayChart(graphedData);
-    hiddenArea.classList.remove('hidden');
-  } else {
-    updateChart(graphedData);
-  }
-  
+  displayChart(graphedData);
+  hiddenArea.classList.remove('hidden');
 }
 
 // Parse Config
@@ -88,14 +80,12 @@ const readAndParseFile = () => {
 
 // Parse Button Click Event Func
 parseBtn.onclick = () => {
-  initial = true;
   readAndParseFile();
 }
 
 // Filter Button Click Event Func
 filterBtn.onclick = () => {
   if (startDate.value !== '' && endDate.value !== '') {
-    initial = false;
     readAndParseFile();
   } else {
     alert('Please Select a Start & End Date');

@@ -42,6 +42,7 @@ const buildConfig = data => (
           },
           afterBuildTicks: function(scale, ticks) {
             const majorUnit = scale._majorUnit;
+            console.log('MAjorUnit', majorUnit, scale)
             const firstTick = ticks[0];
             let i, ilen, val, tick, currMajor, lastMajor;
 
@@ -97,11 +98,10 @@ const buildConfig = data => (
 
 const displayChart = sortedData => {
   const cfg = buildConfig(sortedData);
-  chart = new Chart(ctx, cfg);
-}
-
-const updateChart = sortedData => {
-  const cfg = buildConfig(sortedData);
-  chart.destroy();
-  chart = new Chart(ctx, cfg);
+  if (chart) {
+    chart.data.datasets[0].data = sortedData;
+    chart.update();
+  } else {
+    chart = new Chart(ctx, cfg);
+  }
 }
