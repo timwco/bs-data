@@ -2,9 +2,42 @@
 const startDate = document.getElementById('startDate');
 const endDate = document.getElementById('endDate');
 const parseBtn = document.getElementById('parse');
+const standfordBtn = document.getElementById('standfordBtn');
 const filterBtn = document.getElementById('filter');
 const resetBtn = document.getElementById('reset');
 const hiddenArea = document.querySelector('.hidden');
+
+// Parse for Stanford
+const standord = (payload) => {
+  const {data} = payload;
+  // Remove first two rows (two header rows)
+  data.splice(0,2);
+  
+  // Convert data into an object, for easier use
+  const objectified = [];
+  data.forEach(d => {
+    if (d[4]){
+      objectified.push({
+        "GlucoseDisplayTime": `${moment(d[2]).format('YYYY-MM-DD HH:mm:ss')}`,
+        "GlucoseValue": `${Number(d[4])}`,
+      })
+    }
+  })
+
+  const tsvConfig = { delimiter: '\t' }
+  const csvData = Papa.unparse(JSON.stringify(objectified), tsvConfig);
+  const csvObj = new Blob([csvData], {type: 'text/csv;charset=utf-8;'});
+  let csvURL =  null;
+  if (navigator.msSaveBlob) {
+    csvURL = navigator.msSaveBlob(csvObj, 'standford-upload.tsv');
+  } else {
+    csvURL = window.URL.createObjectURL(csvObj);
+  }
+  const tempLink = document.createElement('a');
+  tempLink.href = csvURL;
+  tempLink.setAttribute('download', 'standford-upload.tsv');
+  tempLink.click();
+}
 
 // Parse Callback
 const manipulate = (payload) => {
@@ -60,27 +93,46 @@ const manipulate = (payload) => {
   hiddenArea.classList.remove('hidden');
 }
 
-// Parse Config
+// Parse Config (Manipulate)
 const config = {
 	complete: function(results) {
     manipulate(results);
   },
 }
 
+// Parse Config (Stanford)
+const config2 = {
+  complete: function(results) {
+    standord(results);
+  }
+}
+
 // Kick off the File Reader{
-const readAndParseFile = () => {
+const readAndParseFile = (standford = false) => {
   const fileInput = document.getElementById('files');
   const file = fileInput.files[0];
   if (file) {
-    Papa.parse(file, config);
+    if (standford) {
+      Papa.parse(file, config2);
+    } else {
+      Papa.parse(file, config);
+    }
   } else {
     alert('Please select a file first!!');
   }
 }
 
+
+
 // Parse Button Click Event Func
 parseBtn.onclick = () => {
   readAndParseFile();
+}
+
+// Parse Button Click Event Func
+standfordBtn.onclick = () => {
+  console.log('HERE')
+  readAndParseFile(true);
 }
 
 // Filter Button Click Event Func
