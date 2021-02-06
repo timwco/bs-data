@@ -6,33 +6,76 @@
   <title>Blood Sugar Parse</title>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="src/index.css">
 </head>
 <body>
-  <h1>Pick a File</h1>
 
-  <div class="fileArea">
-    <input type="file" id="files" multiple>
-    <button id="parse">Process Data</button>
+  <!-- This example requires Tailwind CSS v2.0+ -->
+  <div>
+    <nav class="bg-gray-800">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-4">
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <h1 class="text-3xl font-bold leading-tight text-gray-900">
+          Glucose Reporting
+        </h1>
+      </div>
+    </header>
+    <main>
+      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <!-- Replace with your content -->
+        <div class="px-4 py-6 sm:px-0">
+
+          <div class="bg-white shadow sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Select Your Data File 
+              </h3>
+              <div class="mt-2 text-sm text-gray-500">
+                <p>
+                  Download your file from <a href="https://www1.libreview.com/glucosereports" target="_blank">LibreView</a> to your computer, then press the button below and select it.
+                </p>
+                <p><i>Note: The file will be read locally from your computer, it will not get uploaded or stored on our servers.</i></p>
+              </div>
+              <div class="mt-5">
+                <div class="fileArea">
+                  <input type="file" id="files" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                  <button id="parse">Process Data</button>
+                </div>
+              </div>
+            </div>
+          </div>          
+
+          <div class="filterArea hidden">
+            <label for="startDate">Start Date</label>
+            <input type="text" id="startDate">
+            <label for="endDate">End Date</label>
+            <input type="text" id="endDate">
+            <button id="reset">Clear</button>
+            <button id="filter">Filter Data</button>
+            <span> | </span>
+            <button id="standfordBtn">Convert for Stanford</button>
+            <a href="https://abreschi.shinyapps.io/shinySpecClust/" target="_blank">Stanford CGM Viewer</a>
+          </div>
+
+          <div class="canvasArea">
+            <canvas id="myChart" width="400" height="400"></canvas>
+          </div>
+        </div>
+        <!-- /End replace -->
+      </div>
+    </main>
   </div>
 
-  <hr>
 
-  <div class="filterArea hidden">
-    <label for="startDate">Start Date</label>
-    <input type="text" id="startDate">
-    <label for="endDate">End Date</label>
-    <input type="text" id="endDate">
-    <button id="reset">Clear</button>
-    <button id="filter">Filter Data</button>
-    <span> | </span>
-    <button id="standfordBtn">Convert for Stanford</button>
-    <a href="https://abreschi.shinyapps.io/shinySpecClust/" target="_blank">Stanford CGM Viewer</a>
-  </div>
 
-  <div class="canvasArea">
-    <canvas id="myChart" width="400" height="400"></canvas>
-  </div>
   
   <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
